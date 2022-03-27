@@ -368,14 +368,16 @@ extension DetailsVC: HandleMapSearch
 {
     func dropPinZoomIn(placemark:MKPlacemark)
     {
-        // cache the pin
         selectedPin = placemark
-        // clear existing pins
+        
         self.mapView.removeAnnotations(mapView.annotations)
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
+
         /*
-         
+	Pin eklenmesi için yorum satırı kaldırılmalı
+        
+
         annotation.title = placemark.name
         if let city = placemark.locality,
         let state = placemark.administrativeArea {
@@ -384,6 +386,7 @@ extension DetailsVC: HandleMapSearch
         mapView.addAnnotation(annotation)
          
         */
+
         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
         mapView.setRegion(region, animated: true)

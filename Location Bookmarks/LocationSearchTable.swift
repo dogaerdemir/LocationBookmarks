@@ -9,11 +9,12 @@ class LocationSearchTable : UITableViewController
     
     func parseAddress(selectedItem:MKPlacemark) -> String
     {
-        // put a space between "4" and "Melrose Place"
+        
         let firstSpace = (selectedItem.subThoroughfare != nil && selectedItem.thoroughfare != nil) ? " " : ""
-        // put a comma between street and city/state
+
+        // Comma between street-city
         let comma = (selectedItem.subThoroughfare != nil || selectedItem.thoroughfare != nil) && (selectedItem.subAdministrativeArea != nil || selectedItem.administrativeArea != nil) ? ", " : ""
-        // put a space between "Washington" and "DC"
+        
         let secondSpace = (selectedItem.subAdministrativeArea != nil && selectedItem.administrativeArea != nil) ? " " : ""
         let addressLine = String(
             format:"%@%@%@%@%@%@%@",
@@ -26,7 +27,7 @@ class LocationSearchTable : UITableViewController
             // city
             selectedItem.locality ?? "",
             secondSpace,
-            // state
+            
             selectedItem.administrativeArea ?? ""
         )
         return addressLine
