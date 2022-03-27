@@ -3,7 +3,6 @@ import CoreData
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
-
     @IBOutlet weak var tableView: UITableView!
     var titleArray = [String]()
     var idArray = [UUID]()
@@ -152,6 +151,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     {
         if segue.identifier == "toDetailsVC"
         {
+            let backItem = UIBarButtonItem()
+            backItem.title = "Back"
+            navigationItem.backBarButtonItem = backItem
+            
             let destinationVC = segue.destination as! DetailsVC
             destinationVC.selectedTitle = chosenTitle
             destinationVC.selectedTitleID = chosenTitleID

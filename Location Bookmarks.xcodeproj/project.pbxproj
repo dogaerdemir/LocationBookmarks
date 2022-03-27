@@ -15,6 +15,7 @@
 		DAACAB8427EDE8A40058CAC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAACAB8327EDE8A40058CAC3 /* Assets.xcassets */; };
 		DAACAB8727EDE8A40058CAC3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAACAB8527EDE8A40058CAC3 /* LaunchScreen.storyboard */; };
 		DAACAB8F27EDE9590058CAC3 /* DetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAACAB8E27EDE9590058CAC3 /* DetailsVC.swift */; };
+		DAE2168A27F0E97E00BA0546 /* LocationSearchTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE2168927F0E97E00BA0546 /* LocationSearchTable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		DAACAB8627EDE8A40058CAC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DAACAB8827EDE8A40058CAC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAACAB8E27EDE9590058CAC3 /* DetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsVC.swift; sourceTree = "<group>"; };
+		DAE2168927F0E97E00BA0546 /* LocationSearchTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchTable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 			children = (
 				DAACAB7727EDE8A30058CAC3 /* AppDelegate.swift */,
 				DAACAB7927EDE8A30058CAC3 /* SceneDelegate.swift */,
+				DAE2168927F0E97E00BA0546 /* LocationSearchTable.swift */,
 				DAACAB7B27EDE8A30058CAC3 /* ViewController.swift */,
 				DAACAB8E27EDE9590058CAC3 /* DetailsVC.swift */,
 				DAACAB7D27EDE8A30058CAC3 /* Main.storyboard */,
@@ -147,6 +150,7 @@
 				DAACAB8227EDE8A30058CAC3 /* Location_Bookmarks.xcdatamodeld in Sources */,
 				DAACAB7C27EDE8A30058CAC3 /* ViewController.swift in Sources */,
 				DAACAB7827EDE8A30058CAC3 /* AppDelegate.swift in Sources */,
+				DAE2168A27F0E97E00BA0546 /* LocationSearchTable.swift in Sources */,
 				DAACAB7A27EDE8A30058CAC3 /* SceneDelegate.swift in Sources */,
 				DAACAB8F27EDE9590058CAC3 /* DetailsVC.swift in Sources */,
 			);

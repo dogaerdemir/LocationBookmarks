@@ -3,9 +3,18 @@ import MapKit
 import CoreLocation
 import CoreData
 
+protocol HandleMapSearch
+{
+    func dropPinZoomIn(placemark:MKPlacemark)
+}
+
 class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate
 {
     @IBOutlet weak var mapView: MKMapView!
+    
+    var selectedPin: MKPlacemark? = nil
+    
+    var resultSearchController: UISearchController? = nil
     
     @IBOutlet weak var nameText: UITextField!
     @IBOutlet weak var commentText: UITextField!
@@ -28,6 +37,24 @@ class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,
     override func viewDidLoad()
     {
         super.viewDidLoad()
+    
+        let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable
+        
+        locationSearchTable.handleMapSearchDelegate = self
+        
+        let searchBar = resultSearchController!.searchBar
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search for places"
+        navigationItem.titleView = resultSearchController?.searchBar
+        
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        resultSearchController?.dimsBackgroundDuringPresentation = true
+        definesPresentationContext = true
+        
+        locationSearchTable.mapView = mapView
+        
         
         setupTextFields()
         mapView.delegate = self
@@ -40,15 +67,8 @@ class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,
         locationManager.requestWhenInUseAuthorization() // "Uygulamayı kullanırken" seçeneği (arkaplanda aktif seçeneği de var)
         locationManager.startUpdatingLocation()
         
-        
-        // Uzun basılmayı algılayan gesture recognizer
-        let gesRec = UILongPressGestureRecognizer(target: self, action: #selector(chooseLocationPin(gesRec:)))
-        gesRec.minimumPressDuration = 0.75 // Kaç saniye basılması gerekiyor
-        mapView.addGestureRecognizer(gesRec)
-        
         let keyboardGesRec = UITapGestureRecognizer(target: self, action: #selector(klavyeyikapat))
         view.addGestureRecognizer(keyboardGesRec)
-        
         
         if(selectedTitle != "") // Tableviewdan geliniyor, kaydedilmiş hazır veri
         {
@@ -56,7 +76,8 @@ class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,
             locationButton.isHidden = true
             nameText.isUserInteractionEnabled = false
             commentText.isUserInteractionEnabled = false
-            
+            mapView.gestureRecognizers?.removeAll()
+            searchBar.isHidden = true
             commentText.placeholder = ""
             
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -124,8 +145,14 @@ class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,
         
         else
         {
+            // Uzun basılmayı algılayan gesture recognizer
+            let gesRec = UILongPressGestureRecognizer(target: self, action: #selector(chooseLocationPin(gesRec:)))
+            gesRec.minimumPressDuration = 0.75 // Kaç saniye basılması gerekiyor
+            mapView.addGestureRecognizer(gesRec)
+            
             saveButton.isHidden = false
             locationButton.isHidden = false
+            searchBar.isHidden = false
             
             nameText.isUserInteractionEnabled = true
             commentText.isUserInteractionEnabled = true
@@ -165,6 +192,8 @@ class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,
             annotation.coordinate = touchedCoordinates // Pin koordinatları
             annotation.title = nameText.text // Pin başlığı
             annotation.subtitle = commentText.text // Pin açıklama/altbaşlığı
+            
+            mapView.removeAnnotations(mapView.annotations)
             self.mapView.addAnnotation(annotation)
         }
     }
@@ -218,8 +247,6 @@ class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,
                         item.openInMaps(launchOptions: launchOption)
                     }
                 }
-                
-                
             }
         }
     }
@@ -333,5 +360,32 @@ class DetailsVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate,
     @objc func doneButtonClicked()
     {
         view.endEditing(true)
+    }
+}
+
+
+extension DetailsVC: HandleMapSearch
+{
+    func dropPinZoomIn(placemark:MKPlacemark)
+    {
+        // cache the pin
+        selectedPin = placemark
+        // clear existing pins
+        self.mapView.removeAnnotations(mapView.annotations)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = placemark.coordinate
+        /*
+         
+        annotation.title = placemark.name
+        if let city = placemark.locality,
+        let state = placemark.administrativeArea {
+            annotation.subtitle = "(city) (state)"
+        }
+        mapView.addAnnotation(annotation)
+         
+        */
+        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
+        mapView.setRegion(region, animated: true)
     }
 }
